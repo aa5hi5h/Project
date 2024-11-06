@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button"
 import { GraduationCap, Shapes } from "lucide-react"
 import Link from "next/link"
 
+
 const LandingPage = () => {
+
+
+    
 
     
 
@@ -13,7 +17,7 @@ const LandingPage = () => {
                <div className="text-7xl">Contribute. Repeat.</div>
             </div>
             <div className="max-w-xl m-6 items-center text-center mx-auto">
-                <p className="text-muted-foreground text-lg">"" Learn from the best resources and  educator from all across the world through thier interactive live seesions , assignment and many more "</p>
+                <p className="text-muted-foreground text-lg">&apos;&apos; Learn from the best resources and  educator from all across the world through thier interactive live seesions , assignment and many more &apos;&apos;</p>
             </div>
             <div className="flex gap-4 items-center justify-center ">
                 <Link href={"/courses"}>

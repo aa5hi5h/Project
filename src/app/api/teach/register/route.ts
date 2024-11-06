@@ -1,6 +1,7 @@
 import prisma from "@/lib/db"
 import { auth } from "@clerk/nextjs/server"
 import { NextResponse } from "next/server"
+import * as bcrypt from "bcrypt"
 
 
 export async function POST(request:Request){
@@ -21,15 +22,19 @@ export async function POST(request:Request){
             return NextResponse.json({message:'Tutor Already Registered'},{status:401})
         }
 
-        const {name ,bio } = await request.json()
+        const {name ,email,password,bio } = await request.json()
 
         if(!name){
             return NextResponse.json({message:"Missign required field"},{status:403})
         }
 
+        const hashPassword = await bcrypt.hash(password,10)
+
         const newTutor = await prisma.tutor.create({
             data:{
                 name,
+                email,
+                password: hashPassword,
                 userId:session.userId,
                 bio
             }

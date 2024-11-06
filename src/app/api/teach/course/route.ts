@@ -6,11 +6,13 @@ import { NextResponse } from "next/server"
 export async function POST(request:Request){
     try{
 
-        const session = await auth()
+        const session = await auth();
+console.log("Session:", session);
+if (!session || !session.userId) {
+    return NextResponse.json({ message: "Authentication Required" }, { status: 401 });
+}
 
-        if(!session.userId){
-            return NextResponse.json({message:"Authrntication Required"},{status:401})
-        }
+
 
         const tutorExist = await prisma.tutor.findUnique({
             where:{
@@ -22,23 +24,35 @@ export async function POST(request:Request){
             return NextResponse.json({message:"You need to first registered as tutor"},{status:401})
         }
 
-        const {name,description,syllabus,content,category} = await request.json()
+        const {name,description,Syllabus,content,category} = await request.json()
 
-        if(!name || !syllabus || !content){
+        if(!name || !Syllabus || !content){
             return NextResponse.json({message:'missing required fields'},{status:401})
         }
+
+        console.log("Creating course with data:", {
+            name,
+            description,
+            Syllabus,
+            content,
+            category,
+            userId: session.userId,
+            TutorId: tutorExist.userId
+        });
 
         const newCourse = await prisma.course.create({
             data:{
                 name,
                 description,
-                Syllabus: syllabus,
+                Syllabus,
                 content,
                 category,
                 userId: session.userId,
                 TutorId: tutorExist.userId
             }
         })
+
+        console.log("NEW_COURSE",newCourse)
 
         return NextResponse.json({message:"new cpurse created "},{status:201})
 
