@@ -7,7 +7,8 @@ export async function POST(request:Request){
     try{
 
         const session = await auth();
-console.log("Session:", session);
+
+
 if (!session || !session.userId) {
     return NextResponse.json({ message: "Authentication Required" }, { status: 401 });
 }
@@ -24,21 +25,24 @@ if (!session || !session.userId) {
             return NextResponse.json({message:"You need to first registered as tutor"},{status:401})
         }
 
-        const {name,description,Syllabus,content,category} = await request.json()
+        console.log("CODE REACHES PAHSE 1")
+
+        const body = await request.json()
+
+        console.log("BODY::::",body)
+
+        const {name,description,Syllabus,content,category} = body
 
         if(!name || !Syllabus || !content){
             return NextResponse.json({message:'missing required fields'},{status:401})
         }
 
-        console.log("Creating course with data:", {
-            name,
-            description,
-            Syllabus,
-            content,
-            category,
-            userId: session.userId,
-            TutorId: tutorExist.userId
-        });
+        console.log("CODE REACHES PHASE 2")
+
+        console.log("Session User ID:", session.userId);
+console.log("Tutor Existence Check:", tutorExist);
+console.log("Course Payload:", { name, description, Syllabus, content, category });
+
 
         const newCourse = await prisma.course.create({
             data:{
@@ -46,15 +50,16 @@ if (!session || !session.userId) {
                 description,
                 Syllabus,
                 content,
-                category,
+                category: category || "webDev",
                 userId: session.userId,
-                TutorId: tutorExist.userId
+                TutorId: tutorExist.id
             }
         })
 
         console.log("NEW_COURSE",newCourse)
 
-        return NextResponse.json({message:"new cpurse created "},{status:201})
+       return NextResponse.json({message:"COurse Created hahah "},{status:201})
+
 
     }catch(error){
         console.log("ERRROR:::",error)
@@ -78,7 +83,7 @@ export async function GET(request:Request){
             }
         })
 
-        return courses
+        return NextResponse.json({data:courses},{status:201})
 
     }catch(error){
         console.log("ERROR:::::",error)

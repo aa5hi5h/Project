@@ -1,12 +1,16 @@
 import prisma from "@/lib/db"
+import { useParams } from "next/navigation"
 import { NextResponse } from "next/server"
 
 
 
-export async function GET(request:Request,{params}:{params:{id:string}}){
+export async function GET(request:Request,ctx:{params:{id:string}}){
     try{
 
-        const {id} = params
+        const {id} = await ctx.params
+
+        console.log("ID:::::",id)
+        
 
         const course = await prisma.course.findUnique({
             where:{
@@ -17,7 +21,9 @@ export async function GET(request:Request,{params}:{params:{id:string}}){
             }
         })
 
-        return course
+        console.log(course)
+
+        return NextResponse.json({message:'course found',data:course},{status:201})
 
 
     }catch(error){

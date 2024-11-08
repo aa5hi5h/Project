@@ -53,15 +53,16 @@ const CreateCourse = () => {
             const response = await fetch('/api/teach/course',{
                 method: "POST",
                 headers:{
-                    "Content-type": "application/json"
+                    "Content-type": "Application/json"
                 },
                 body: JSON.stringify(input)
             }) 
 
-            const result = await response.json()
+            console.log("RESPONSE",response)
+
 
             if(response.ok){
-                console.log("COurse Created",result)
+                console.log("COurse Created")
                 router.push("/teach/courses")
             }else{
                 console.log("Error creating the course")

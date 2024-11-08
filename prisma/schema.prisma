@@ -33,6 +33,8 @@ model Course {
   Syllabus String
   content String
   category Category?
+  saved Boolean @default(false)
+  Purchased Boolean @default(false)
 
   TutorId String @db.ObjectId
   Tutor Tutor @relation(fields: [TutorId], references: [id])

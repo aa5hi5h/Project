@@ -12,7 +12,7 @@ export async function GET(request:Request){
             }
         })
 
-        return courses
+        return NextResponse.json({message:"Found courses",data:courses},{status:201})
 
     }catch(error){
         console.log(error)
